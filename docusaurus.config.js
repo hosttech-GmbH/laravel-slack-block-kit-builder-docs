@@ -16,7 +16,7 @@ const config = {
   url: 'https://hosttech-gmbh.github.io/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/laravel-slack-block-kit-builder',
+  baseUrl: '/laravel-slack-block-kit-builder-docs',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
