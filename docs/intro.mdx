@@ -1,0 +1,79 @@
+---
+sidebar_position: 1
+---
+
+# Getting started
+
+## Installation & setup
+
+You can install the package using Composer:
+
+```bash
+composer require hosttech/laravel-slack-block-kit-builder
+```
+<a id="setup" class="anchorWithStickyNavbar_custom"></a>
+You can use the facade
+
+```php
+use Hosttech\SlackBlockKitBuilder\Facades\SlackBlockKitBuilder;
+
+$builder = SlackBlockKitBuilder::make();
+```
+
+to create a builder instance.
+
+## Adding blocks
+
+These three methods can be used to add blocks:
+
+```php
+// sets all blocks at once, no existing blocks will remain:
+$builder->blocks([
+    // list multiple blocks here
+]);
+
+// pushes one block to the end of the structure
+$builder->pushBlock(
+    // use one block here
+);
+
+// to insert at the beginning
+$builder->prependBlock(
+    // use one block here
+);
+```
+
+## Conditionally adding blocks
+
+Since the builder uses Laravels `Conditionable` trait, you can use `when()`, `unless()` and so on:
+
+```php
+$randomInt = random_int(0, 1);
+
+$builder
+    ->when($randomInt === 0, fn (BlockKitBuilder $builder) => $builder->pushBlock())
+    ->unless($randomInt === 0, fn (BlockKitBuilder $builder) => $builder->prependBlock());
+```
+
+## Sending a Block Kit based slack message
+
+We recommend to use `spatie/laravel-slack-alerts`. Build the payload using our Builder, send it using the package made by Spatie:
+
+```php
+use Hosttech\SlackBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlackBlockKitBuilder\Blocks\HeaderBlock;
+use Spatie\SlackAlerts\Facades\SlackAlert;
+
+$builder = SlackBlockKitBuilder::make();
+    ->blocks([
+        HeaderBlock::make('Testing'),
+    ]);
+
+SlackAlert::blocks($builder->toArray());
+```
+
+:::tip
+
+Also check out the well written documentation of [`spatie/laravel-slack-alerts`](https://github.com/spatie/laravel-slack-alerts).
+
+:::

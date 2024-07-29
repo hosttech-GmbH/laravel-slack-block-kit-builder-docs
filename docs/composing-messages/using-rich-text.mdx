@@ -1,0 +1,112 @@
+---
+sidebar_position: 1
+---
+
+# Using rich text formatting
+
+Let's compose a rich text message:
+
+First, we create a builder instance and add a rich text block with a simple text:
+
+```php
+use Hosttech\SlackBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlackBlockKitBuilder\Blocks\RichTextBlock;
+use Hosttech\SlackBlockKitBuilder\Elements\RichTextItemTextElement;
+
+SlackBlockKitBuilder::make()
+    ->blocks([
+        RichTextBlock::make()
+            ->elements([
+                RichTextSectionElement::make()
+                    ->elements([
+                        RichTextItemTextElement::make('My simple text goes here!')
+                    ]),
+            ]),
+    ]);
+```
+
+The message will look like this:
+
+![Preview of simple Slack block kit based message](/img/rich-text-simple-preview.png "Preview of simple Slack block kit based message")
+
+## Using bold & italic
+
+You can simply call methods on instances of `RichTextItemTextElement`:
+
+```php
+$textElement = RichTextItemTextElement::make('My simple text goes here!')
+    // highlight-start
+    ->bold()
+    ->italic();
+    // highlight-end
+```
+
+The text will be displayed in bold and italic.
+
+## Creating lists
+
+Lists are not that complex. Let's have a look at how we can create unordered and ordered lists.
+
+### Basics
+
+```php
+use Hosttech\SlackBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlackBlockKitBuilder\Blocks\RichTextBlock;
+use Hosttech\SlackBlockKitBuilder\Elements\RichTextItemTextElement;
+
+SlackBlockKitBuilder::make()
+    ->blocks([
+        RichTextBlock::make()
+            ->elements([
+                // highlight-start
+                RichTextListElement::make()
+                    ->elements([
+                // highlight-end
+                        RichTextSectionElement::make()
+                            ->elements([
+                                RichTextItemTextElement::make('My simple text goes here!')
+                            ]),
+                // highlight-start
+                    ]),
+                // highlight-end
+            ]),
+    ]);
+```
+
+As you can see, we've basically wrapped `RichTextListElement::make()->elements([...])` around our existing `RichTextSectionElement` from above.
+
+:::tip
+
+Inside a list, every section element will be a new list item.
+
+You can then use text elements to style the text in the list item differently (e.g. partially bold).
+
+:::
+
+This will create an unordered list by default.
+
+### Ordered lists
+
+To use ordered list, just call a method on the `RichTextListElement` instance:
+
+```php
+$listElement = RichTextListElement::make()
+    // highlight-start
+    ->ordered();
+    // highlight-end
+```
+
+### Adjusting indent / border / offset
+
+By default, the list will not be indented, have no border and offset will also be set to `0`.
+
+You can adjust these values by calling methods in the `RichTextListElement` instance:
+
+```php
+$listElement = RichTextListElement::make()
+    // highlight-start
+    ->indent(1) // list items will be indented one level
+    ->border(2) // border will have 2px width
+    ->offset(8); // list items will be offset by 8px
+    // highlight-end
+```

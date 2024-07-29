@@ -1,0 +1,61 @@
+---
+sidebar_position: 2
+---
+
+# Composing messages
+
+We're going to build some of the examples in the Slack Block Kit reference here in PHP.
+
+For every example here, you first need a Builder instance: See [Getting started / Setup](/docs/intro#setup).
+
+We use `->pushBlock()` in the code examples but you can also use the other methods mentiod @ Getting started.
+
+## Adding a header
+
+Adding a header is simple:
+
+```php
+use Hosttech\SlacKBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlacKBlockKitBuilder\Blocks\HeaderBlock;
+
+SlackBlockKitBuilder::make()
+    ->pushBlock(HeaderBlock::make('A Heartfelt Header'));
+```
+
+You can only configure the text of the header. May also contain emojis like `:rotating_light:`.
+
+## Adding a divider
+
+Adding a divider is simple, too:
+
+```php
+use Hosttech\SlacKBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlacKBlockKitBuilder\Blocks\DividerBlock;
+
+SlackBlockKitBuilder::make()
+    ->pushBlock(DividerBlock::make());
+```
+
+It **cannot** be configured.
+
+## Adding context
+
+This is how you can add a context block:
+
+```php
+use Hosttech\SlacKBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlacKBlockKitBuilder\Blocks\ContextBlock;
+use Hosttech\SlacKBlockKitBuilder\Elements\ContextElement;
+
+SlackBlockKitBuilder::make()
+    ->pushBlock(
+        ContextBlock::make()
+            ->elements([
+                ContextElement::make('My way of life :balloon:'),
+            ]),
+    );
+```
+
+As you can see, you can add context elements via `->elements([...])`.
+
+**Only instances of** `ContextElement` are allowed to be passed inside `->elements([...])`.

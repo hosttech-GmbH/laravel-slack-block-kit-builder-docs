@@ -1,0 +1,4 @@
+new-version:
+  label: New version
+  permalink: /new-version
+  description: Posts tagged with "New version" give you the details about recently added features, bugfixes and more changes to our package.

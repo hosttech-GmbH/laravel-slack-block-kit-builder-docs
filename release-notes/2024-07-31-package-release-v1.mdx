@@ -1,0 +1,39 @@
+---
+slug: package-release-v1
+title: Package release v1.0.0
+tags: [new-version]
+---
+
+We've created a package to build the Block Kit payload you probably send to Slack using `spatie/laravel-slack-alerts` in **an object-oriented way**.
+
+<!--truncate-->
+
+Install it (& also Spaties package) now by running this in the root directory of your Laravel project:
+
+```bash
+composer require hosttech/laravel-slack-block-kit-builder spatie/laravel-slack-alerts
+```
+
+After the command has succeeded, let's send a rich text message:
+
+```php
+use Hosttech\SlackBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlackBlockKitBuilder\Blocks\RichTextBlock;
+use Hosttech\SlackBlockKitBuilder\Blocks\RichText\RichTextItemTextBlock;
+use Hosttech\SlackBlockKitBuilder\Blocks\RichText\RichTextSectionBlock;
+use Spatie\SlackAlerts\Facades\SlackAlert;
+
+$builder = SlackBlockKitBuilder::make()
+    ->blocks([
+        RichTextBlock::make()
+            ->elements([
+                RichTextSectionBlock::make()
+                    ->elements([
+                        RichTextItemTextBlock::make('Welcome!')
+                            ->bold(),
+                    ]),
+            ]),
+    ]);
+
+SlackAlert::blocks($builder->toArray());
+```

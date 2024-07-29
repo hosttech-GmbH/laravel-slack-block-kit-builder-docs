@@ -1,0 +1,36 @@
+---
+sidebar_position: 3
+---
+
+# Usage in tests
+
+You can run assertions on the Facade
+
+```php
+use App\Actions\BuildAndSendSlackAlertAction;
+use Hosttech\SlackBlockKitBuilder\Facades\SlackBlockKitBuilder;
+use Hosttech\SlackBlockKitBuilder\Blocks\HeaderBlock;
+
+it('sends correct slack alert', function (): void {
+    SlackBlockKitBuilder::shouldReceive('make')
+            ->once()
+            ->andReturn(SlackBlockKitBuilder::getFacadeRoot())
+            ->shouldReceive('blocks')
+            ->once()
+            // highlight-start
+            ->withArgs(fn (array $blocksArg): bool => expect($blockArg)->{0}->toBeInstanceOf(HeaderBlock::class))
+            // highlight-end
+            ->andReturn(SlackBlockKitBuilder::getFacadeRoot())
+            ->shouldReceive('toArray')
+            ->once()
+            ->andReturn(['testing']);
+
+    SlackAlert::shouldReceive('blocks')
+        ->withArgs(fn (array $blocksArg) => $blocksArg[0] === 'testing');
+
+    // imaginary action we're testing
+    resolve(BuildAndSendSlackAlertAction::class)();
+});
+```
+
+In the callback of the highlighted line, you can extend the expectation chain, e.g. asserting HeaderBlock has the correct content.
